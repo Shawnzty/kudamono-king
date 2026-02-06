@@ -24,9 +24,10 @@ export function ListingForm({ listing }: ListingFormProps) {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
-  const [images, setImages] = useState<string[]>(
-    listing?.images.map((img) => img.url) || []
+  const [images, setImages] = useState<{ url: string; publicId: string }[]>(
+    listing?.images.map((img) => ({ url: img.url, publicId: img.publicId })) || []
   );
 
   const [formData, setFormData] = useState({
@@ -52,14 +53,32 @@ export function ListingForm({ listing }: ListingFormProps) {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files) return;
+    if (!files || files.length === 0) return;
 
-    // For MVP, we'll use placeholder URLs
-    // In production, integrate Cloudinary or similar
-    const newImages = Array.from(files).map(
-      (_, i) => `https://picsum.photos/seed/${Date.now() + i}/800/800`
-    );
-    setImages([...images, ...newImages].slice(0, 5));
+    const remaining = 5 - images.length;
+    const filesToUpload = Array.from(files).slice(0, remaining);
+    setUploading(true);
+
+    try {
+      const uploads = await Promise.all(
+        filesToUpload.map(async (file) => {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+          const res = await fetch(
+            `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+            { method: "POST", body: formData }
+          );
+          const data = await res.json();
+          return { url: data.secure_url as string, publicId: data.public_id as string };
+        })
+      );
+      setImages((prev) => [...prev, ...uploads]);
+    } catch {
+      setError(t("common.error"));
+    } finally {
+      setUploading(false);
+    }
   };
 
   const removeImage = (index: number) => {
@@ -82,7 +101,7 @@ export function ListingForm({ listing }: ListingFormProps) {
           ...formData,
           price: parseInt(formData.price),
           quantity: parseInt(formData.quantity),
-          images: images.map((url, i) => ({ url, publicId: `img-${i}`, order: i })),
+          images: images.map((img, i) => ({ url: img.url, publicId: img.publicId, order: i })),
         }),
       });
 
@@ -130,12 +149,12 @@ export function ListingForm({ listing }: ListingFormProps) {
         <CardContent className="p-6">
           <Label className="mb-4 block">{t("listing.images")}</Label>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-            {images.map((url, i) => (
+            {images.map((img, i) => (
               <div
                 key={i}
                 className="relative aspect-square overflow-hidden rounded-xl bg-muted"
               >
-                <img src={url} alt="" className="h-full w-full object-cover" />
+                <img src={img.url} alt="" className="h-full w-full object-cover" />
                 <button
                   type="button"
                   onClick={() => removeImage(i)}
@@ -146,10 +165,14 @@ export function ListingForm({ listing }: ListingFormProps) {
               </div>
             ))}
             {images.length < 5 && (
-              <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50">
-                <ImagePlus className="h-8 w-8 text-muted-foreground" />
+              <label className={`flex aspect-square flex-col items-center justify-center rounded-xl border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50 ${uploading ? "pointer-events-none opacity-50" : "cursor-pointer"}`}>
+                {uploading ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <ImagePlus className="h-8 w-8 text-muted-foreground" />
+                )}
                 <span className="mt-2 text-xs text-muted-foreground">
-                  {t("listing.addImages")}
+                  {uploading ? t("common.loading") : t("listing.addImages")}
                 </span>
                 <input
                   type="file"
@@ -157,6 +180,7 @@ export function ListingForm({ listing }: ListingFormProps) {
                   multiple
                   className="hidden"
                   onChange={handleImageUpload}
+                  disabled={uploading}
                 />
               </label>
             )}
@@ -302,7 +326,7 @@ export function ListingForm({ listing }: ListingFormProps) {
 
       {/* Submit */}
       <div className="flex gap-4">
-        <Button type="submit" className="flex-1" disabled={loading}>
+        <Button type="submit" className="flex-1" disabled={loading || uploading}>
           {loading && <Spinner size="sm" className="mr-2" />}
           {listing ? t("common.save") : t("listing.publish")}
         </Button>
