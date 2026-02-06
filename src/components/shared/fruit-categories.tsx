@@ -17,7 +17,7 @@ export function FruitCategories() {
         <Link
           key={key}
           href={`/listings?fruit=${key}`}
-          className="flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary/80"
+          className="flex items-center gap-2 rounded-full border border-green-100 bg-white px-4 py-2 text-sm font-medium shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md hover:border-green-200 dark:border-green-900 dark:bg-green-950/30 dark:hover:border-green-700"
         >
           <span className="text-lg">{value.emoji}</span>
           <span>{value[locale]}</span>
