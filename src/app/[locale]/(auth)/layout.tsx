@@ -11,7 +11,7 @@ export default function AuthLayout({
       <header className="flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center space-x-2">
           <span className="text-2xl">🍎</span>
-          <span className="text-xl font-semibold">果物王</span>
+          <span className="text-xl font-semibold">果物キング</span>
         </Link>
         <LocaleSwitcher />
       </header>
