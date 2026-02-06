@@ -31,7 +31,7 @@ export function ListingCard({ listing }: ListingCardProps) {
 
   return (
     <Link href={`/listings/${listing.id}`}>
-      <Card className="group overflow-hidden transition-all hover:shadow-lg">
+      <Card className="group overflow-hidden border-transparent shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
         <div className="relative aspect-square overflow-hidden bg-muted">
           <Image
             src={imageUrl}
@@ -41,21 +41,21 @@ export function ListingCard({ listing }: ListingCardProps) {
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
           <div className="absolute left-3 top-3">
-            <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm">
+            <Badge className="border-0 bg-white/90 text-green-800 backdrop-blur-sm dark:bg-black/70 dark:text-green-300">
               {fruitType?.emoji} {fruitType?.[locale] || listing.fruitType}
             </Badge>
           </div>
         </div>
         <CardContent className="p-4">
           <h3 className="line-clamp-1 font-semibold">{listing.title}</h3>
-          <p className="mt-1 text-lg font-bold text-primary">
+          <p className="mt-1 text-lg font-bold text-green-700 dark:text-green-400">
             {formatPrice(listing.price, locale === "ja" ? "ja-JP" : "en-US")}
             <span className="text-sm font-normal text-muted-foreground">
               /{priceUnit?.[locale]}
             </span>
           </p>
           <div className="mt-3 flex items-center justify-between">
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1 text-xs text-orange-600/80 dark:text-orange-400/80">
               <MapPin className="h-3 w-3" />
               {prefecture?.[locale]}
             </div>

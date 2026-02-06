@@ -7,7 +7,7 @@ export function Footer() {
   const t = useTranslations();
 
   return (
-    <footer className="border-t bg-background">
+    <footer className="border-t bg-gradient-to-b from-background to-green-50/50 dark:to-green-950/10">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="md:flex md:items-center md:justify-between">
           <div className="flex items-center space-x-2">

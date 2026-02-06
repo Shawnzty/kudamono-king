@@ -66,12 +66,14 @@ export default async function DashboardPage({
 
       {/* Stats */}
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
-        <Card>
+        <Card className="border-green-100 bg-gradient-to-br from-green-50 to-white dark:border-green-900 dark:from-green-950/30 dark:to-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {t("listing.myListings")}
             </CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
+            <div className="rounded-lg bg-green-100 p-2 dark:bg-green-900/50">
+              <Package className="h-4 w-4 text-green-700 dark:text-green-400" />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{activeListings}</div>
@@ -80,12 +82,14 @@ export default async function DashboardPage({
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-orange-100 bg-gradient-to-br from-orange-50 to-white dark:border-orange-900 dark:from-orange-950/30 dark:to-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {locale === "ja" ? "総閲覧数" : "Total Views"}
             </CardTitle>
-            <Eye className="h-4 w-4 text-muted-foreground" />
+            <div className="rounded-lg bg-orange-100 p-2 dark:bg-orange-900/50">
+              <Eye className="h-4 w-4 text-orange-700 dark:text-orange-400" />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -93,12 +97,14 @@ export default async function DashboardPage({
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-purple-100 bg-gradient-to-br from-purple-50 to-white dark:border-purple-900 dark:from-purple-950/30 dark:to-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {t("messages.inbox")}
             </CardTitle>
-            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            <div className="rounded-lg bg-purple-100 p-2 dark:bg-purple-900/50">
+              <MessageSquare className="h-4 w-4 text-purple-700 dark:text-purple-400" />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{conversationCount}</div>
