@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "果物王",
+    "appName": "果物キング",
     "tagline": "新鮮な果物を、生産者から直接。",
     "search": "検索",
     "searchPlaceholder": "果物を検索...",
@@ -206,11 +206,11 @@
     "OKINAWA": "沖縄県"
   },
   "footer": {
-    "about": "果物王について",
+    "about": "果物キングについて",
     "terms": "利用規約",
     "privacy": "プライバシーポリシー",
     "contact": "お問い合わせ",
-    "copyright": "© 2024 果物王. All rights reserved."
+    "copyright": "© 2024 果物キング. All rights reserved."
   },
   "errors": {
     "notFound": "ページが見つかりません",

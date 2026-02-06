@@ -1,4 +1,4 @@
-# Kudamono King | 果物王
+# Kudamono King | 果物キング
 
 A peer-to-peer fruit marketplace connecting producers directly with consumers across Japan.
 
